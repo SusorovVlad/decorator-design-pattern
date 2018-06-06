@@ -5,9 +5,9 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class Salary {
+public final class Salary {
 
-    private BigDecimal amount;
+    private final BigDecimal amount;
 
     private Salary(BigDecimal amount) {
         Objects.requireNonNull(amount, "Amount cannot be null.");
@@ -22,9 +22,8 @@ public class Salary {
     }
 
     public Salary apply(Function<BigDecimal, BigDecimal> ... bonuses) {
-        this.amount = Stream.of(bonuses)
+        return new Salary(Stream.of(bonuses)
                 .reduce(Function.identity(), Function::andThen)
-                .apply(amount);
-        return this;
+                .apply(amount));
     }
 }
